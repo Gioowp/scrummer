@@ -59,11 +59,21 @@ function __scrm_plugin_environment(){
 	
 // Registrieren der WordPress-Hooks
 	add_action('admin_menu', "__{$GLOBALS['plgn_shortname']}_plugin_admin_menu");
-	
+
+
+	//////// plugin public actions
+	if(!is_admin())__scrmActions();
 
 	return;
 }
 
+
+
+function __scrmActions(){
+
+
+
+}
 
 
 function __scrm_plugin_admin_menu() {
@@ -71,16 +81,23 @@ function __scrm_plugin_admin_menu() {
 
 
 	//create top-level menu
-	$ident = basename(dirname(__FILE__)).'/admin/main.php';
+	$ident = basename(dirname(__FILE__)).'/admin/index.php';
 	add_menu_page( 'Scrummer', 'Scrummer', 'manage_options', $ident);
-	//add_submenu_page( $ident, 'Field Values', 'Field Values', 'manage_options', 'dddd', '__scrm_plugin_get_page' );
+	add_submenu_page( $ident, 'Settings', 'Settings', 'manage_options', 'settings', '__scrm_plugin_get_page' );
 
 
 	$dirname = plugins_url().'/'.basename(dirname(__FILE__));
 	//print "{$dirname}/assets/main.js";
 
+	wp_enqueue_style( 'bootstrap', "{$dirname}/assets/bootstrap/css/bootstrap.min.css", array(), '3.2' );
+	wp_enqueue_style( 'bootstrap-theme', "{$dirname}/assets/bootstrap/css/bootstrap-theme.min.css", array(), '3.2' );
+//	wp_enqueue_script( 'bootstrap', "{$dirname}/assets/bootstrap/js/bootstrap.min.js", array( 'jquery' ), '20141010' );
+
 	wp_enqueue_script( "myfunc_{$GLOBALS['plgn_shortname']}", "{$dirname}/assets/main.js",array('jquery'), 1.1 );
+	wp_enqueue_script( "jquery-ui-{$GLOBALS['plgn_shortname']}", "{$dirname}/assets/jquery-ui.min.js",array('jquery'), 1.1 );
 	wp_register_style( "{$GLOBALS['plgn_shortname']}-plugin-main-style", "{$dirname}/assets/style.css" );
+
+
 	
 	__scrm_localize();
 
@@ -106,15 +123,9 @@ function __scrm_plugin_get_page(){
 }
 
 function __scrm_init_vars(){
-	$current =  get_bloginfo('language');
+
 	$pluginname = __pn(__FILE__);
-	$tmp = get_option( "{$pluginname}_languages", array());
-	
-	if(!isset($tmp[$current])){ 
-		$tmp[$current] = $current; 
-		$tmp = update_option( "{$pluginname}_languages", $tmp); 
-	}
-	
+
 	
 	return;	
 }

@@ -3,27 +3,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////// plugin additional functions 
-if (!function_exists('__admin_pages')) {
-function __admin_pages(){
-	global $p;
-
-	if(!chek_val($p,1))return false;
-	$filename = chek_val($p,1);
-
-	$dirname = chek_val($p,2)?'part':$p[2];
-	
-	if(__chek_file($filename, $dirname )){
-		print __file_part($filename, $dirname);
-	}elseif(__chek_file($filename,'admin')){
-		return __file_part($filename, 'admin');
-	}elseif(__chek_file($filename,'form')){
-		return __file_part($filename, 'form');
-	}
-	
-	return;
-	
-}}
-
 if (!function_exists('__link_to')) {
 function __link_to($to='a='){
 ///// V1.1.1 created for wp
@@ -79,12 +58,13 @@ function pp($arr=array()){
 if (!function_exists('__file_part')) {
 function __file_part($cf = ''){//v1
 //////// get file
-	$cf = __default_configer($cf,'file=&dir=part&data=ar&plugin=');
+	$cf = __params($cf,'file=&dir=part&data=ar&plugin=');
 	if(empty($cf['file']))return false;
 	global $wpdb, $p, $act, $fl;
-	$incfile = false;
 
-	if(!$incfile = __chek_file("file={$cf['file']}&dir={$cf['dir']}&plugin={$cf['plugin']}")){//print_rr($cf);
+	$incfile = __chek_file("file={$cf['file']}&dir={$cf['dir']}&plugin={$cf['plugin']}");
+
+	if(!__chek_file($incfile)){//print_rr($cf);
 	//print __chek_file("file={$cf['file']}&dir={$cf['dir']}&plugin={$cf['plugin']}&return=dir")."{$cf['file']}.php";
 		file_put_contents(__chek_file("file={$cf['file']}&dir={$cf['dir']}&plugin={$cf['plugin']}&return=dir")."{$cf['file']}.php", $cf['file']);
 		return false;
@@ -99,7 +79,7 @@ function __file_part($cf = ''){//v1
 
 if (!function_exists('__chek_file')){
 function __chek_file( $cf = '' ){//v1
-	$cf = __default_configer($cf,'file=&dir=part&return=fullpatch&plugin=');
+	$cf = __params($cf,'file=&dir=part&return=fullpatch&plugin=');
 
 	//$abspatch = substr(__FILE__,0,strpos(__FILE__,'plugins'));
 	$patch = ABSPATH .'wp-content\plugins\\'.$cf['plugin'].'\\';
