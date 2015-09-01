@@ -1,14 +1,14 @@
 <?php
 /*
-Plugin Name: Simple String Manager
-Plugin URI: http://ssm.anaxe.net/
-Description: Manage strings/words from admin panel; Use as string translator at multilanguage sites;
-Version: 0.6
-Author: ssm.anaxe.net
-Author URI: http://ssm.anaxe.net/
-Update Server: http://ssm.anaxe.net/
+Plugin Name: Scrummer
+Plugin URI: http://scrummer.anaxe.net/
+Description: Agile Scrum tool as Wordpress plugin;
+Version: 0.1
+Author: scrummer.anaxe.net
+Author URI: http://scrummer.anaxe.net/
+Update Server: http://scrummer.anaxe.net/
 Min WP Version: 3.2
-Max WP Version: 3.8.+
+Max WP Version: 4.3.+
 */
 
 if(!function_exists('__pn')){
@@ -17,14 +17,14 @@ function __pn($file=__FILE__){
 }}
 
 
-$GLOBALS['plgn_shortname'] = 'ssm'; // plugin short name
-$GLOBALS["{$GLOBALS['plgn_shortname']}_version"] = '0.6'; // plugin version
+$GLOBALS['plgn_shortname'] = 'scrm'; // plugin short name
+$GLOBALS["{$GLOBALS['plgn_shortname']}_version"] = '0.1'; // plugin version
 
 add_filter( 'init', "__{$GLOBALS['plgn_shortname']}_init_vars", 20, 3);
 register_activation_hook(__FILE__, "__{$GLOBALS['plgn_shortname']}_plugin_install");
 
 
-__ssm_plugin_environment();
+__scrm_plugin_environment();
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,12 +34,12 @@ __ssm_plugin_environment();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-function __ssm_plugin_environment(){
+function __scrm_plugin_environment(){
 	$funcdir = __DIR__."/funcs/";
 	if(!is_file($funcdir.'sys.php'))return false;
 	require_once "{$funcdir}sys.php";
 	
-	if (get_site_option("{$GLOBALS['plgn_shortname']}_version") < $GLOBALS["{$GLOBALS['plgn_shortname']}_version"])__ssm_plugin_install();
+	if (get_site_option("{$GLOBALS['plgn_shortname']}_version") < $GLOBALS["{$GLOBALS['plgn_shortname']}_version"])__scrm_plugin_install();
 	
 	
 //	print "{$funcdir}sys.php";
@@ -66,29 +66,29 @@ function __ssm_plugin_environment(){
 
 
 
-function __ssm_plugin_admin_menu() {
+function __scrm_plugin_admin_menu() {
 //add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
 
 
 	//create top-level menu
 	$ident = basename(dirname(__FILE__)).'/admin/main.php';
-	add_menu_page( 'Simple String Manager', 'String Manager', 'manage_options', $ident);
-	//add_submenu_page( $ident, 'Field Values', 'Field Values', 'manage_options', 'dddd', '__ssm_plugin_get_page' );
+	add_menu_page( 'Scrummer', 'Scrummer', 'manage_options', $ident);
+	//add_submenu_page( $ident, 'Field Values', 'Field Values', 'manage_options', 'dddd', '__scrm_plugin_get_page' );
 
 
 	$dirname = plugins_url().'/'.basename(dirname(__FILE__));
-	//print "{$dirname}/static/myfunc.js";
+	//print "{$dirname}/assets/main.js";
 
-	wp_enqueue_script( "myfunc_{$GLOBALS['plgn_shortname']}", "{$dirname}/static/myfunc.js",array('jquery'), 1.1 );
-	wp_register_style( "{$GLOBALS['plgn_shortname']}-plugin-main-style", "{$dirname}/static/style.css" );
+	wp_enqueue_script( "myfunc_{$GLOBALS['plgn_shortname']}", "{$dirname}/assets/main.js",array('jquery'), 1.1 );
+	wp_register_style( "{$GLOBALS['plgn_shortname']}-plugin-main-style", "{$dirname}/assets/style.css" );
 	
-	__ssm_localize();
+	__scrm_localize();
 
 	return false;
 }
 
 
-function __ssm_plugin_get_page(){
+function __scrm_plugin_get_page(){
 	if(!isset($_GET['page']))return false;
 	$plgn = basename(dirname(__FILE__)); // plugin name 
 	$var = strip_tags($_GET['page']);
@@ -105,7 +105,7 @@ function __ssm_plugin_get_page(){
 	return false;
 }
 
-function __ssm_init_vars(){
+function __scrm_init_vars(){
 	$current =  get_bloginfo('language');
 	$pluginname = __pn(__FILE__);
 	$tmp = get_option( "{$pluginname}_languages", array());
@@ -120,7 +120,7 @@ function __ssm_init_vars(){
 }
 
 
-function __ssm_localize(){
+function __scrm_localize(){
 	wp_localize_script( "myfunc_{$GLOBALS['plgn_shortname']}", "dinob", array(
 		'home_url' => home_url(),
 	));
@@ -130,32 +130,12 @@ function __ssm_localize(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////// install plugin DBs
-function __ssm_plugin_install(){ //return false;
+function __scrm_plugin_install(){ //return false;
 	$plugin = basename(dirname(__FILE__));
    global $wpdb;
 
    $installed_ver = get_option( "{$plugin}_version" );
 	if( $installed_ver >= $GLOBALS["{$GLOBALS['plgn_shortname']}_version"] )return false;
-
-	$tmp = get_option( "meplgn_tables", array());
-	if(array_search('words',$tmp)===false){ $tmp[]='words'; update_option( "meplgn_tables", $tmp); }
-	
-	$table_name = "{$GLOBALS['wpdb']->prefix}__words";
-
-	$sql = "CREATE TABLE {$table_name} (
-	id INT NOT NULL AUTO_INCREMENT,
-	  domain text NOT NULL,
-	  name text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	  data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	  config text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	  status text NOT NULL,
-	UNIQUE KEY id (id)
-	);
-	";
-	
-   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-   
-   dbDelta($sql);
 
  
    update_option( "{$plugin}_version", $GLOBALS["{$GLOBALS['plgn_shortname']}_version"]);
