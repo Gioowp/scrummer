@@ -30,7 +30,7 @@ nav li{ float:left; margin:5px; padding:5px; box-sizing:border-box; }
 .btn-xs{ cursor:pointer; }
 
 
-.ui-dialog{ background:#ccc; z-index:400; width:500px; height:80%; }
+.ui-dialog{ background:#ccc; z-index:400; width:500px; height:80%; position:absolute; top:10%; }
 .ui-widget-overlay{ background:#0384a4; opacity:0.5; width:100%; height:100%; position:absolute; top:0; left:0; }
 
 

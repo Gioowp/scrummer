@@ -2,7 +2,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////// plugin additional functions 
+/////// plugin additional functions
 if (!function_exists('__link_to')) {
 function __link_to($to='a='){
 ///// V1.1.1 created for wp
@@ -64,7 +64,7 @@ function __file_part($cf = ''){//v1
 
 	$incfile = __chek_file("file={$cf['file']}&dir={$cf['dir']}&plugin={$cf['plugin']}");
 
-	if(!__chek_file($incfile)){//print_rr($cf);
+	if(!$incfile){//pp($cf);
 	//print __chek_file("file={$cf['file']}&dir={$cf['dir']}&plugin={$cf['plugin']}&return=dir")."{$cf['file']}.php";
 		file_put_contents(__chek_file("file={$cf['file']}&dir={$cf['dir']}&plugin={$cf['plugin']}&return=dir")."{$cf['file']}.php", $cf['file']);
 		return false;

@@ -60,18 +60,62 @@ function __scrm_plugin_environment(){
 // Registrieren der WordPress-Hooks
 	add_action('admin_menu', "__{$GLOBALS['plgn_shortname']}_plugin_admin_menu");
 
-
+	add_action( 'init', 'loadScrummerPostTypes', 0 );
 	//////// plugin public actions
-	if(!is_admin())__scrmActions();
+	if(!is_admin()){
+		__scrmActions();
+		add_action("template_redirect", 'my_theme_redirect');
+	}
 
 	return;
 }
 
 
 
+
+function my_theme_redirect(){
+	global $wp;
+
+
+	$plugindir = dirname( __FILE__ ).'/';
+
+	if(!empty($wp->request) && strpos($wp->request,'/')!==false){
+		$request = substr($wp->request, 0 , strpos($wp->request,'/'));
+	}else{
+		$request = $wp->request;
+	}
+
+
+	$file = __chek_file("file={$request}&dir=view&plugin=scrummer");
+
+	if($file){
+		loadScrummerPostTypes();
+		global $post, $wp_query;
+		include($file);
+		exit;
+	}
+
+
+	return;
+
+}
+
+
 function __scrmActions(){
+	$dirname = plugins_url().'/'.basename(dirname(__FILE__));
+	//print "{$dirname}/assets/main.js";
+
+	wp_enqueue_style( 'bootstrap', "{$dirname}/assets/bootstrap/css/bootstrap.min.css", array(), '3.2' );
+	wp_enqueue_style( 'bootstrap-theme', "{$dirname}/assets/bootstrap/css/bootstrap-theme.min.css", array('bootstrap'), '3.2' );
+	wp_enqueue_script( 'bootstrap', "{$dirname}/assets/bootstrap/js/bootstrap.min.js", array( 'jquery' ), '20141010' );
+	wp_enqueue_style( "stylefile", "{$dirname}/assets/main.css", array('bootstrap'), '3.2');
+
+	wp_enqueue_script( "myfunc_{$GLOBALS['plgn_shortname']}", "{$dirname}/assets/main.js",array('jquery'), 1.1 );
+	wp_enqueue_script( "jquery-ui-{$GLOBALS['plgn_shortname']}", "{$dirname}/assets/jquery-ui.min.js",array('jquery'), 1.1 );
 
 
+
+	__scrm_localize();
 
 }
 
@@ -80,26 +124,12 @@ function __scrm_plugin_admin_menu() {
 //add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
 
 
-	//create top-level menu
+
+
+	//create admin menu
 	$ident = basename(dirname(__FILE__)).'/admin/index.php';
 	add_menu_page( 'Scrummer', 'Scrummer', 'manage_options', $ident);
 	add_submenu_page( $ident, 'Settings', 'Settings', 'manage_options', 'settings', '__scrm_plugin_get_page' );
-
-
-	$dirname = plugins_url().'/'.basename(dirname(__FILE__));
-	//print "{$dirname}/assets/main.js";
-
-	wp_enqueue_style( 'bootstrap', "{$dirname}/assets/bootstrap/css/bootstrap.min.css", array(), '3.2' );
-	wp_enqueue_style( 'bootstrap-theme', "{$dirname}/assets/bootstrap/css/bootstrap-theme.min.css", array(), '3.2' );
-//	wp_enqueue_script( 'bootstrap', "{$dirname}/assets/bootstrap/js/bootstrap.min.js", array( 'jquery' ), '20141010' );
-
-	wp_enqueue_script( "myfunc_{$GLOBALS['plgn_shortname']}", "{$dirname}/assets/main.js",array('jquery'), 1.1 );
-	wp_enqueue_script( "jquery-ui-{$GLOBALS['plgn_shortname']}", "{$dirname}/assets/jquery-ui.min.js",array('jquery'), 1.1 );
-	wp_register_style( "{$GLOBALS['plgn_shortname']}-plugin-main-style", "{$dirname}/assets/style.css" );
-
-
-	
-	__scrm_localize();
 
 	return false;
 }
@@ -116,6 +146,7 @@ function __scrm_plugin_get_page(){
 		print call_user_func_array($var);
 	}else{
     //__this_plugin_styles();
+
 		print __file_part( array('file'=>$var, 'dir'=>'admin','plugin'=>$plgn) );
 	}
 	print "</div>";

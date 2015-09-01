@@ -54,13 +54,19 @@ get_header(); ?>
                 <div class="panel-heading">
                     <div class="pull-left">list Name <?=$i?></div>
 
+
+
+                    <div class="btn-xs btn-default pull-right doAddNewListItem" id="dropdownMenu1" title="Add item to list">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </div>
+
                     <div class="dropdown itemType pull-right">
                         <div class="btn-xs btn-default" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </div>
 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li class="doAddNewListItem"><span class="glyphicon glyphicon-plus"></span> Add new Item </li>
+                            <li class="doAddNewListItem"><span class="glyphicon glyphicon-plus"></span> Add Item </li>
                             <li><span class="glyphicon glyphicon-ok"></span> Mark as Done </li>
                             <li><span class="glyphicon glyphicon-remove"></span> Delete List </li>
                         </ul>
@@ -167,7 +173,109 @@ get_header(); ?>
 
 <div class="listItemForm panel panel-default">
     <div class="panel-body">
-        Basic panel example
+        <form>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">Item Text</div>
+                <div class="panel-body">
+                    <textarea name="new-item" style="border:none; height:100px;"></textarea>
+                </div>
+            </div>
+
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">Add Attachmen</div>
+                <div class="panel-body">
+
+
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">From URL</button>
+                </span>
+                <input type="text" class="form-control" placeholder="Search for...">
+            </div>
+
+            <label class="btn btn-success col-lg-12 mt-15" for="my-file-selector">
+                <input id="my-file-selector" type="file" style="display:none;">
+                From computer
+            </label>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="panel panel-primary">
+                <div class="panel-body">
+
+
+                    <div class="dropdown itemPoint pull-left mr-5">
+                        <div class="btn btn-primary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">1 Point</div>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><span class="glyphicon glyphicon-record"></span> 1 Point </li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown itemPoint pull-left mr-5">
+                        <div class="btn btn-primary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">1 Point</div>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><span class="glyphicon glyphicon-record"></span> 1 Point </li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown itemPoint pull-left mr-5">
+                        <div class="btn btn-primary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">1 Point</div>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><span class="glyphicon glyphicon-record"></span> 1 Point </li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown itemPoint pull-left mr-5">
+                        <div class="btn btn-primary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">1 Point</div>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><span class="glyphicon glyphicon-record"></span> 1 Point </li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown itemPoint pull-left mr-5">
+                        <div class="btn btn-primary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">1 Point</div>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><span class="glyphicon glyphicon-record"></span> 1 Point </li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown itemPoint pull-left mr-5">
+                        <div class="btn btn-primary" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">1 Point</div>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><span class="glyphicon glyphicon-record"></span> 1 Point </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="btn btn-primary">1 hr.</div>
+                    <div class="btn btn-primary">Bug</div>
+                    <div class="btn btn-primary">Normal</div>
+                    <div class="btn btn-primary">1 value</div>
+                    <div class="btn btn-primary">Label</div>
+                    <div class="btn btn-primary">Members</div>
+
+
+
+                </div>
+
+
+            </div>
+
+
+            <input type="submit" value="Save" class="btn btn-primary">
+        </form>
     </div>
 </div>
 
