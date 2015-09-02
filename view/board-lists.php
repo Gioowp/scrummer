@@ -81,49 +81,19 @@ get_header(); ?>
                         <div class="panel-heading">
 
 
-                            <div class="dropdown itemPoint pull-left">
-                                <div class="btn-xs btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">TM</div>
-
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li><span class="glyphicon glyphicon-record"></span> 1 Point </li>
-                                    <li><span class="glyphicon glyphicon-record"></span> 2 Point </li>
-                                    <li><span class="glyphicon glyphicon-record"></span> 3 Point </li>
-                                    <li><span class="glyphicon glyphicon-record"></span> 4 Point </li>
-                                </ul>
-                            </div>
-
-                            <div class="dropdown itemType pull-left">
-                                <div class="btn-xs btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">T</div>
-
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li><span class="glyphicon glyphicon-map-marker"></span> Improvement </li>
-                                    <li><span class="glyphicon glyphicon-map-marker"></span> Bug </li>
-                                    <li><span class="glyphicon glyphicon-map-marker"></span> Task </li>
-                                    <li><span class="glyphicon glyphicon-map-marker"></span> Feature </li>
-                                </ul>
-                            </div>
-
-
-                            <div class="dropdown itemPriority pull-left">
-                                <div class="btn-xs btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">P</div>
-
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li><span class="glyphicon glyphicon-pushpin"></span> Low </li>
-                                    <li><span class="glyphicon glyphicon-pushpin"></span> Normal </li>
-                                    <li><span class="glyphicon glyphicon-pushpin"></span> High </li>
-                                    <li><span class="glyphicon glyphicon-pushpin"></span> Urgent </li>
-                                </ul>
+                            <div class="pull-left mr-5 doSetDate">
+                                <div class="btn-xs btn-default dueDate" type="button" title="Due date">Due date</div>
+                                <input type="text" class="dateBuffer" >
                             </div>
 
                             <div class="dropdown itemValue pull-left">
-                                <div class="btn-xs btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">V</div>
+                                <div class="btn-xs btn-default doDropDown" type="button" id="dropdownMenu1" aria-haspopup="true" aria-expanded="true">Labels</div>
+                                <?=labelsBox()?>
+                            </div>
 
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                    <li><span class="glyphicon glyphicon-pushpin"></span> 1 Value </li>
-                                    <li><span class="glyphicon glyphicon-pushpin"></span> 2 Value </li>
-                                    <li><span class="glyphicon glyphicon-pushpin"></span> 3 Value </li>
-                                    <li><span class="glyphicon glyphicon-pushpin"></span> 4 Value </li>
-                                </ul>
+                            <div class="dropdown itemValue pull-left">
+                                <div class="btn-xs btn-default doDropDown" type="button" id="dropdownMenu1" aria-haspopup="true" aria-expanded="true">Members</div>
+                                <?=membersBox()?>
                             </div>
 
 
@@ -135,20 +105,19 @@ get_header(); ?>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                     <li><span class="glyphicon glyphicon-list-alt"></span> Show Item </li>
                                     <li><span class="glyphicon glyphicon-off"></span> Delete </li>
-                                    <li><span class="glyphicon glyphicon-tags"></span> Clone </li>
-                                    <li><span class="glyphicon glyphicon-ok"></span> Mark as Done </li>
+                                    <li><span class="glyphicon glyphicon-tags"></span> Copy </li>
 
                                 </ul>
                             </div>
 
 
 
-                            <div class="itemStatus pull-right"><span class="glyphicon glyphicon-ok"></span></div>
-                            <div class="itemComments pull-right"><span class="glyphicon glyphicon-comment"></span>3</div>
                         </div>
 
                         <div class="panel-body">
-                            Panel content Lorem Ipsum Like textes
+                            <div class="itemTitle">Panel content Lorem Ipsum Like textes</div>
+                            <div class="itemComments pull-right"><span class="glyphicon glyphicon-comment"></span> 3</div>
+                            <div class="activeLabels"> </div>
                         </div>
 
                     </div>

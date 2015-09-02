@@ -1,6 +1,58 @@
 <?php
 
+/////////////////////
+////// widgets
+function labelsBox($params=''){
+    $params = __params("tax=&");
 
+    $colors = presetParams('color');
+
+
+    $ret = '';
+    foreach($colors as $v){
+
+        $ret .= "<div style='background:#{$v}' class='labelRow' hexcode='{$v}'>
+                    <input type='text' value='' />
+                    <div class='labelStatus glyphicon glyphicon-ok pull-right'></div>
+            </div>";
+
+    }
+
+    return "<div class='dropdown-menu labelBox'>
+                <h3>Set Labels</h3>
+                {$ret}
+                <div class='doCloseDropdown btn btn-success pull-left'>Close</div>
+                <div class='note pull-right'>Click color to edit</div>
+            </div>";
+}
+
+function membersBox($params=''){
+    $params = __params("tax=&");
+
+    $members = ['Member One', 'Member tWo'];
+
+
+    $ret = '';
+    foreach($members as $v){
+        $tmp = explode(' ', $v);
+        $abreviation = strtoupper( substr(trim($tmp[0]),0,1) ).strtoupper( substr(trim($tmp[1]),0,1) );
+        $ret .= "<div class='memberRow'>
+                    <div class='memberAbreviation'>{$abreviation}</div>
+                    <div class='memberTitle'>{$v}</div>
+                    <div class='memberStatus glyphicon glyphicon-ok pull-right'></div>
+            </div>";
+
+    }
+
+    return "<div class='dropdown-menu memberBox'>
+                <h3>Set Members</h3>
+                {$ret}
+                <div class='doCloseDropdown btn btn-success pull-left'>Close</div>
+            </div>";
+}
+
+
+///////////////////
 function saveComment(){
 
 }
@@ -31,7 +83,16 @@ function getAttribute($params=''){
 
 
 
+///////////////
 
+function presetParams($type=''){
+    if($type=='color') {
+        return $colors = ['16a085', '27ae60', '2980b9', '8e44ad', '2c3e50', 'f39c12', 'd35400', 'c0392b', 'bdc3c7', '7f8c8d'];
+    }
+
+    return false;
+
+}
 
 
 

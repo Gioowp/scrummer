@@ -24,13 +24,48 @@ nav li{ float:left; margin:5px; padding:5px; box-sizing:border-box; }
 .sorting-placeholder{ background:#0384a4; width:100%; float:left; height:100px; box-sizing:border-box;   }
 .boardList .panel-heading, .boardList .panel-footer{ float:left; width:100%; padding: 4px 10px; }
 .listHead{ background:#0384a4; box-shadow:#000; box-sizing:border-box; }
-.listItem{ margin:7px 5px;}
+
+.listItem{ margin:7px 5px; float:left;}
 .listItem .dropdown .btn-xs{ margin-right:4px; }
 .dropdown-menu li{ box-sizing:border-box; padding:0 7px; margin:4px 0; cursor:pointer; }
 .btn-xs{ cursor:pointer; }
-
+.listItem .itemComments{ position:absolute; bottom:2px; right:10px; color:#95a5a6; font-size:10px; }
+.listItem .panel-body{ position:relative; float:left; }
+.listItem .panel-body .activeLabels .activeLabel{ float:left; width:31%; margin:1%; font-size:10px; overflow:hidden; box-sizing:border-box; padding:4px; color:#fff; height:20px; border-radius:2px; text-align:center; font-family:Arial, Tahome; }
 
 .ui-dialog{ background:#ccc; z-index:400; width:500px; height:80%; position:absolute; top:10%; }
 .ui-widget-overlay{ background:#0384a4; opacity:0.5; width:100%; height:100%; position:absolute; top:0; left:0; }
+
+.doSetDate{ position:relative; overflow:hidden; }
+
+#ui-datepicker-div{ width:300px; background:#ecf0f1; padding:15px; }
+.dateBuffer{ width:0px !important; height:0; border:none; padding:1px; left:-50px; top:-10px; position:absolute; }
+#ui-datepicker-div .ui-datepicker-header a{ width:25%; float:left; text-align:center; cursor:pointer; margin-bottom:10px; }
+#ui-datepicker-div .ui-datepicker-header a.ui-datepicker-next{ float:right; }
+#ui-datepicker-div .ui-datepicker-header select{ width:25%; float:left; border:solid 1px #95a5a6; }
+.ui-datepicker-today{ background:#bdc3c7; }
+.ui-datepicker-current-day{ background:#95a5a6; }
+.ui-datepicker-calendar td, .ui-datepicker-calendar th{ text-align:center; }
+
+
+.labelBox{ padding:10px 20px; }
+.labelRow{ width:300px; margin:5px 0px; float:left; height:40px; }
+.labelRow input{ border:none; background:none; margin:5px; max-width:270px; height:30px; box-sizing:border-box; color:#fff; }
+.labelRow .labelStatus{ cursor:pointer; color:#ccc; }
+.labelRow .labelStatus.active{ color:#f00; }
+
+
+.memberBox{ width:250px; float:left; box-sizing:border-box; padding:5px 10px; }
+.memberBox .memberRow{ width:100%; float:left; margin:5px 0; cursor:pointer; }
+.memberBox .memberRow .memberTitle{ float:left; }
+.memberBox .memberRow .memberStatus{ color:#ccc; }
+
+.memberAbreviation{ width:30px; float:left; background:#ccc; border-radius:2px; text-align:center; margin:0 4px; color:#191e23; font-family:Arial;  }
+
+
+
+
+
+
 
 
