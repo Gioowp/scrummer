@@ -1,5 +1,45 @@
 <?php
 
+//function getters
+function getBoards(){
+
+    $taxonomies = ['scrummer_board'];
+
+    $args = array(
+        'orderby'           => 'name',
+        'order'             => 'ASC',
+        'hide_empty'        => false,
+        'exclude'           => array(),
+        'exclude_tree'      => array(),
+        'include'           => array(),
+        'number'            => '',
+        'fields'            => 'all',
+        'slug'              => '',
+        'parent'            => '',
+        'hierarchical'      => true,
+        'child_of'          => 0,
+        'childless'         => false,
+        'get'               => '',
+        'name__like'        => '',
+        'description__like' => '',
+        'pad_counts'        => false,
+        'offset'            => '',
+        'search'            => '',
+        'cache_domain'      => 'core'
+    );
+
+    $terms = get_terms($taxonomies, $args);
+
+    return $terms;
+//    print_r($terms);
+
+}
+
+
+function getLists(){
+    return __file_part( ['file'=>'board-lists-loop', 'dir'=>'view','plugin'=>'scrummer'] );
+}
+
 /////////////////////
 ////// widgets
 function labelsBox($params=''){
@@ -33,11 +73,11 @@ function membersBox($params=''){
 
 
     $ret = '';
-    foreach($members as $v){
+    foreach($members as $k=>$v){
         $tmp = explode(' ', $v);
         $abreviation = strtoupper( substr(trim($tmp[0]),0,1) ).strtoupper( substr(trim($tmp[1]),0,1) );
-        $ret .= "<div class='memberRow'>
-                    <div class='memberAbreviation'>{$abreviation}</div>
+        $ret .= "<div class='memberRow' memberId='{$k}'>
+                    <div class='memberAbreviation' memberId='{$k}' title='{$v}'>{$abreviation}</div>
                     <div class='memberTitle'>{$v}</div>
                     <div class='memberStatus glyphicon glyphicon-ok pull-right'></div>
             </div>";
@@ -65,9 +105,51 @@ function saveAttachment(){
 
 }
 
+function saveList(){
+    print_r($_POST);
+    $tmp = explode(',',$_POST['members']);
+
+    $members = [];
+    foreach($tmp as $v){
+        if(empty($v))continue;
+        $members[] = $v;
+    }
+
+    $post = array(
+//        'ID'             => [ <post id> ] // Are you updating an existing post?
+  'post_content'   => $_POST['new-list-title'],
+  'post_name'      => $_POST['new-list-title'],
+  'post_title'     => $_POST['new-list-title'],
+  'post_status'    => 'publish',
+  'post_type'      => 'scrummer_list',
+
+);
+
+    $listId = wp_insert_post( $post );
+    update_post_meta($listId, 'members', $members);
+
+    wp_set_post_terms( $listId, [$_POST['board']], 'scrummer_board' );
+
+    return $listId;
+
+
+}
 
 function saveBoard(){
+//    print_r($_POST);
+    if(!chek_val($_POST, 'new-board-title'))return false;
 
+    $term = strip_tags($_POST['new-board-title']);
+
+    $ar = get_term_by( 'name', $term, 'scrummer_board', ARRAY_A );
+
+//    print_r($ar);
+    if(isset($ar['term_id'])){
+        return "Ooops... <br /> Board with name {$term} already exists. <br /> Try another one!";
+    }
+
+    wp_insert_term( $term, 'scrummer_board' );
+    return "All is Ok <br /> New board created";
 }
 
 
@@ -99,10 +181,21 @@ function presetParams($type=''){
 
 
 /////////////////////////////////////////////////////
+add_action('wp_ajax_nopriv_ajaxactions', 'ajaxActions');
+add_action('wp_ajax_ajaxactions', 'ajaxActions');
+
+function ajaxActions() {
+
+    if(isset($_POST['whattodo']) && function_exists($_POST['whattodo'])){
+        print call_user_func($_POST['whattodo']);
+    }
+
+    exit;
+    die(); // this is required to return a proper result
+}
+
+
 function loadScrummerPostTypes(){
-
-
-
 
 ///// post types
     $args = array(
@@ -150,7 +243,7 @@ function loadScrummerPostTypes(){
 
 ////// taxonomies
     $args = [
-        'hierarchical'          => false,
+        'hierarchical'          => true,
         'labels'                =>['menu_name'=>'Board','name'=>'Board'],
         'show_ui'               => true,
         'show_admin_column'     => true,

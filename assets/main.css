@@ -31,6 +31,8 @@ nav li{ float:left; margin:5px; padding:5px; box-sizing:border-box; }
 .btn-xs{ cursor:pointer; }
 .listItem .itemComments{ position:absolute; bottom:2px; right:10px; color:#95a5a6; font-size:10px; }
 .listItem .panel-body{ position:relative; float:left; }
+.listItem .panel-body .activeLabels, .listItem .panel-body .activeMembers{ float:left; width:100%; margin:0 0 5px 0; padding:0;}
+
 .listItem .panel-body .activeLabels .activeLabel{ float:left; width:31%; margin:1%; font-size:10px; overflow:hidden; box-sizing:border-box; padding:4px; color:#fff; height:20px; border-radius:2px; text-align:center; font-family:Arial, Tahome; }
 
 .ui-dialog{ background:#ccc; z-index:400; width:500px; height:80%; position:absolute; top:10%; }
@@ -59,8 +61,10 @@ nav li{ float:left; margin:5px; padding:5px; box-sizing:border-box; }
 .memberBox .memberRow{ width:100%; float:left; margin:5px 0; cursor:pointer; }
 .memberBox .memberRow .memberTitle{ float:left; }
 .memberBox .memberRow .memberStatus{ color:#ccc; }
+.memberBox .memberRow.active .memberStatus{ color:#f00; }
 
-.memberAbreviation{ width:30px; float:left; background:#ccc; border-radius:2px; text-align:center; margin:0 4px; color:#191e23; font-family:Arial;  }
+
+.memberAbreviation{ width:30px; float:left; background:#ccc; border-radius:2px; text-align:center; margin:0 4px; color:#191e23; font-family:Arial; font-weight:bold; cursor:default; }
 
 
 
