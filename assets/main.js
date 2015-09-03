@@ -124,6 +124,7 @@ jQuery(document).ready(function($){
 	////// save list
 	jQuery('body').on('submit', '#listForm', function (e) {
 		e.preventDefault();
+		jQuery('.alert', this).remove();
 
 		var formData = new FormData(this);
 		formData.append('members', collectMembersId( jQuery('.activeMembers', this) ));
@@ -138,7 +139,8 @@ jQuery(document).ready(function($){
 			contentType: false,
 			type: 'POST',
 			success: function(data){
-				alert(data);
+				//alert(data);
+				if(data)jQuery('#listForm').prepend( addAlerts(data) );
 			}
 		});
 

@@ -157,7 +157,7 @@ get_header(); ?>
             <div class="panel panel-primary">
                 <div class="panel-heading">Board title</div>
                 <div class="panel-body">
-                    <textarea name="new-board-title" style="border:none; height:50px;"></textarea>
+                    <input name="new-board-title" style="border:none; width:100%;" />
                 </div>
             </div>
 
@@ -176,7 +176,7 @@ get_header(); ?>
             <div class="panel panel-primary">
                 <div class="panel-heading">List title</div>
                 <div class="panel-body">
-                    <textarea name="new-list-title" style="border:none; height:50px;"></textarea>
+                    <input name="new-list-title" style="border:none; width: 100%;" />
                 </div>
             </div>
 
