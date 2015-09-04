@@ -70,6 +70,7 @@ function __file_part($cf = ''){//v1
 		return false;
 	}
 
+	$data = $cf['data'];
 	ob_start();
 	include $incfile;
 	$ret = ob_get_contents();

@@ -1,16 +1,6 @@
 jQuery(document).ready(function($){
 
 
-
-
-	jQuery( ".boardList" ).sortable({
-		items: "> div.listItem",
-		connectWith: ".boardList",
-		placeholder: "sorting-placeholder"
-	});
-//    jQuery( ".boardList" ).disableSelection();
-
-
 	jQuery( ".manageCol" ).accordion({
 		collapsible: true,
 		header: ".panel-heading",
@@ -23,6 +13,31 @@ jQuery(document).ready(function($){
 
 	});
 
+
+	jQuery( ".commentForm" ).dialog({
+		autoOpen: false,
+		draggable: false,
+		modal: true,
+		minHeight: 600,
+		minWidth: 700,
+
+	});
+	jQuery( "body" ).on('click','.listItem .itemTitle',function() {
+		jQuery( ".commentForm" ).dialog( "open").attr('itemId', jQuery(this).attr('itemId'));
+
+		jQuery.ajax({
+			url: dinob.home_url+'/wp-admin/admin-ajax.php',
+			data: { action:'ajaxactions', whattodo:'getComments', itemid: jQuery(this).attr('itemId') },
+			type: 'POST',
+			success: function(data){
+				//alert(data);
+				jQuery('.commentForm .commentsList').html(data);
+			}
+		});
+		//getComments
+	});
+
+
 	jQuery( ".listItemForm" ).dialog({
 		autoOpen: false,
 		draggable: false,
@@ -31,8 +46,8 @@ jQuery(document).ready(function($){
 		minWidth: 700,
 
 	});
-	jQuery( ".doAddNewListItem" ).click(function() {
-		jQuery( ".listItemForm" ).dialog( "open" );
+	jQuery( "body" ).on('click','.doAddNewListItem',function() {
+		jQuery( ".listItemForm" ).dialog( "open").attr('listId', jQuery(this).attr('listId'));
 	});
 
 	jQuery( ".listForm" ).dialog({
@@ -43,7 +58,7 @@ jQuery(document).ready(function($){
 		minWidth: 700,
 
 	});
-	jQuery( ".doAddNewList" ).click(function() {
+	jQuery( "body" ).on('click','.doAddNewList',function() {
 		jQuery( ".listForm" ).dialog( "open" );
 	});
 
@@ -71,9 +86,9 @@ jQuery(document).ready(function($){
 	});
 
 
-	jQuery('body').on('click','.doSetDate',function(e){
+	jQuery('body').on('click','.doSetDate',function(){
 		jQuery( ".dateBuffer", this ).datepicker('show');
-	})
+	});
 
 
 
@@ -115,6 +130,7 @@ jQuery(document).ready(function($){
 			success: function(data){
 				//alert(data);
 				if(data)jQuery('#boardForm').prepend( addAlerts(data) );
+				doSort();
 
 			}
 		});
@@ -141,6 +157,7 @@ jQuery(document).ready(function($){
 			success: function(data){
 				//alert(data);
 				if(data)jQuery('#listForm').prepend( addAlerts(data) );
+				doSort();
 			}
 		});
 
@@ -149,8 +166,13 @@ jQuery(document).ready(function($){
 	//////////// save item
 	jQuery('body').on('submit', '#itemForm', function (e) {
 		e.preventDefault();
-
+		jQuery('.alert', this).remove();
 		var formData = new FormData(this);
+		var listId = jQuery('.listItemForm').attr('listId');
+
+		formData.append('members', collectMembersId( jQuery('.activeMembers', this) ));
+		formData.append('labels',   collectLabels( jQuery('.activeLabels', this) ));
+		formData.append('list', listId );
 
 		jQuery.ajax({
 			url: dinob.home_url+'/wp-admin/admin-ajax.php',
@@ -159,34 +181,53 @@ jQuery(document).ready(function($){
 			contentType: false,
 			type: 'POST',
 			success: function(data){
-				alert(data);
+				if(data)jQuery('#itemForm').prepend( addAlerts(data) );
+				jQuery('.boardList[listId='+listId+'] .listItem').remove();
+
+				///// update list items
+				jQuery.ajax({
+					url: dinob.home_url+'/wp-admin/admin-ajax.php',
+					data: {listId:listId, action:'ajaxactions',whattodo:'getItems'},
+					type: 'POST',
+					success: function(data){
+						jQuery('.boardList[listId='+listId+']').append(data);
+						doSort();
+					}
+				});
+
+
 			}
 		});
 
 	});
 
 	//////////// save comment
-	jQuery('body').on('submit', '#commentForm', function (e) {
+
+	jQuery('body').on('submit', '.itemCommentForm', function (e) {
 		e.preventDefault();
+	});
 
-		var formData = new FormData(this);
+		jQuery('body').on('click', '.doNewComment', function (e) {
+			e.preventDefault();
 
-		jQuery.ajax({
-			url: dinob.home_url+'/wp-admin/admin-ajax.php',
-			data: formData,
-			processData: false,
-			contentType: false,
-			type: 'POST',
-			success: function(data){
-				alert(data);
-			}
-		});
+			var itemId = jQuery('.commentForm').attr('itemId');
+			var comment = jQuery('.commentText').val();
+
+			jQuery.ajax({
+				url: dinob.home_url+'/wp-admin/admin-ajax.php',
+				data: { action:'ajaxactions',whattodo:'saveComment', itemid: itemId, comment:comment },
+				type: 'POST',
+				success: function(data){
+					alert(data);
+				}
+			});
+
 
 	});
 
 
 
-})
+});
 
 
 function updateListsContent(){
@@ -206,6 +247,7 @@ function updateListsContent(){
 		success: function(data){
 			jQuery('.bodyCol').html( data );
 			//alert(data);
+			doSort();
 		}
 	});
 	return;
@@ -223,20 +265,19 @@ function collectMembersId(thiss){
 
 	var members = '';
 	jQuery('[memberid]', thiss).each(function(){
-		console.log( jQuery(this).attr('memberid') );
-
+		//console.log( jQuery(this).attr('memberid') );
 		members = members+','+jQuery(this).attr('memberid');
-
-	})
+	});
 	return members;
 }
 
 function collectLabels(thiss){
 
-	var members = '';
-	jQuery('[memberid]', thiss).each(function(){
-		members = members+','+jQuery(this).attr('memberid');
-	})
+	var labels = '';
+	jQuery('.activeLabel', thiss).each(function(){
+		labels = labels +','+jQuery(this).attr('hexcode')+'|'+jQuery(this).html();
+	});
+	return labels;
 
 }
 
@@ -279,7 +320,7 @@ function updateLabels(thiss){
 		if( jQuery('.labelStatus', this).hasClass('active') ){
 
 
-			jQuery('.activeLabels', listItem).append("<div style='background-color:#"+jQuery(this).attr('hexcode')+";' class='activeLabel "+jQuery(this).attr('hexcode')+"' title='"+jQuery('input', this).val()+"'>"+jQuery('input', this).val()+"</div>");
+			jQuery('.activeLabels', listItem).append("<div style='background-color:#"+jQuery(this).attr('hexcode')+";' hexcode='"+jQuery(this).attr('hexcode')+"' class='activeLabel "+jQuery(this).attr('hexcode')+"' title='"+jQuery('input', this).val()+"'>"+jQuery('input', this).val()+"</div>");
 
 		}else{
 
@@ -328,7 +369,12 @@ function dinForm(thiss){
 		}
 	});
 }
-	
 
 
-
+function doSort(){
+	jQuery( ".boardList" ).sortable({
+		items: "> div.listItem",
+		connectWith: ".boardList",
+		placeholder: "sorting-placeholder"
+	});
+}

@@ -10,17 +10,18 @@
 Defaults
 */
 .hiddenPart{ display:block; position:absolute; }
-
+input:focus, select:focus{ outline:none !important; border:none; }
 /* styles */
 
 header, footer{ width:100%; float:left; background:#ccc; }
 nav li{ float:left; margin:5px; padding:5px; box-sizing:border-box; }
 
 
-.manageCol{ background:#0384a4; }
-.bodyCol{ background:#096484; height:1000px; }
+.manageCol{ background:#0384a4; width:15%; float:left; }
+.bodyCol{ background:#096484; height:800px; width:80%; overflow:auto; float:left; }
 
-.boardList{ width:250px; float:left; display:block; background:#e9f5f9; margin:0 4px; padding:0; height:100%; }
+.listsGrid td{ vertical-align:top; width:260px; border:none;}
+.boardList{ width:250px; float:left; display:block; background:#e9f5f9; margin:0 4px; padding:0; max-height:100%; vertical-align:top; }
 .sorting-placeholder{ background:#0384a4; width:100%; float:left; height:100px; box-sizing:border-box;   }
 .boardList .panel-heading, .boardList .panel-footer{ float:left; width:100%; padding: 4px 10px; }
 .listHead{ background:#0384a4; box-shadow:#000; box-sizing:border-box; }
@@ -30,12 +31,12 @@ nav li{ float:left; margin:5px; padding:5px; box-sizing:border-box; }
 .dropdown-menu li{ box-sizing:border-box; padding:0 7px; margin:4px 0; cursor:pointer; }
 .btn-xs{ cursor:pointer; }
 .listItem .itemComments{ position:absolute; bottom:2px; right:10px; color:#95a5a6; font-size:10px; }
-.listItem .panel-body{ position:relative; float:left; }
+.listItem .panel-body{ position:relative; float:left; width:100%; }
 .listItem .panel-body .activeLabels, .listItem .panel-body .activeMembers{ float:left; width:100%; margin:0 0 5px 0; padding:0;}
 
 .listItem .panel-body .activeLabels .activeLabel{ float:left; width:31%; margin:1%; font-size:10px; overflow:hidden; box-sizing:border-box; padding:4px; color:#fff; height:20px; border-radius:2px; text-align:center; font-family:Arial, Tahome; }
 
-.ui-dialog{ background:#ccc; z-index:400; width:500px; height:80%; position:absolute; top:10%; }
+.ui-dialog{ background:#ccc; z-index:400; width:500px; height:80%; position:absolute; top:10% !important; }
 .ui-widget-overlay{ background:#0384a4; opacity:0.5; width:100%; height:100%; position:absolute; top:0; left:0; }
 
 .doSetDate{ position:relative; overflow:hidden; }

@@ -39,6 +39,13 @@ function getBoards(){
 function getLists(){
     return __file_part( ['file'=>'board-lists-loop', 'dir'=>'view','plugin'=>'scrummer'] );
 }
+function getItems(){
+    return __file_part( ['file'=>'items-loop', 'dir'=>'view','plugin'=>'scrummer'] );
+}
+
+function getComments(){
+    return __file_part( ['file'=>'comments-loop', 'dir'=>'view','plugin'=>'scrummer'] );
+}
 
 /////////////////////
 ////// widgets
@@ -93,48 +100,6 @@ function membersBox($params=''){
 
 
 ///////////////////
-function saveComment(){
-
-}
-
-function saveItem(){
-
-}
-
-function saveAttachment(){
-
-}
-
-function saveList(){
-    print_r($_POST);
-    $tmp = explode(',',$_POST['members']);
-
-    $members = [];
-    foreach($tmp as $v){
-        if(empty($v))continue;
-        $members[] = $v;
-    }
-
-    $post = array(
-//        'ID'             => [ <post id> ] // Are you updating an existing post?
-  'post_content'   => $_POST['new-list-title'],
-  'post_name'      => $_POST['new-list-title'],
-  'post_title'     => $_POST['new-list-title'],
-  'post_status'    => 'publish',
-  'post_type'      => 'scrummer_list',
-
-);
-
-    $listId = wp_insert_post( $post );
-    update_post_meta($listId, 'members', $members);
-
-    wp_set_post_terms( $listId, [$_POST['board']], 'scrummer_board' );
-
-    return $listId;
-
-
-}
-
 function saveBoard(){
 //    print_r($_POST);
     if(!chek_val($_POST, 'new-board-title'))return false;
@@ -152,6 +117,125 @@ function saveBoard(){
     return "All is Ok <br /> New board created";
 }
 
+function saveList(){
+//    print_r($_POST);
+    $tmp = explode(',',$_POST['members']);
+
+    $members = [];
+    foreach($tmp as $v){
+        if(empty($v))continue;
+        $members[] = $v;
+    }
+
+    $listTitle = strip_tags($_POST['new-list-title']);
+
+//    $data = get_page_by_title( $listTitle, ARRAY_A, 'scrummer_list' );
+//    if(isset($data['ID']))return "Ooops.... Sombady already created this list";
+
+    $args = ['post_type' => 'scrummer_list',
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'scrummer_board',
+                'field' => 'id',
+                'terms' => $_POST['boardid'],
+            )
+        )];
+    $lists = new WP_Query( $args );
+
+
+    $post = array(
+//        'ID'             => [ <post id> ] // Are you updating an existing post?
+        'post_content'   => $listTitle,
+        'post_name'      => $listTitle,
+        'post_title'     => $listTitle,
+        'post_status'    => 'publish',
+        'post_type'      => 'scrummer_list',
+
+    );
+
+    $listId = wp_insert_post( $post );
+    update_post_meta($listId, 'members', json_encode( $members));
+
+    wp_set_post_terms( $listId, [$_POST['board']], 'scrummer_board' );
+
+    return "All is Ok. <br> New list created!";
+
+
+}
+
+function saveItem(){
+//    print_r($_POST);
+    $tmp = explode(',', $_POST['members']);
+
+    $members = [];
+    foreach($tmp as $v){
+        if(empty($v))continue;
+        $members[] = $v;
+    }
+
+
+    $tmp = explode(',', $_POST['labels']);
+    $labels = [];
+    foreach($tmp as $v){
+        if(empty($v))continue;
+        list($hexCode, $labelTitle) = explode('|',$v);
+
+        $labels[$hexCode] = $labelTitle;
+
+    }
+
+    $itemTitle = strip_tags($_POST['new-item']);
+
+    $post = array(
+//        'ID'             => [ <post id> ] // Are you updating an existing post?
+        'post_content'   => $itemTitle,
+        'post_name'      => $itemTitle,
+        'post_title'     => $itemTitle,
+        'post_status'    => 'publish',
+        'post_type'      => 'scrummer_item',
+
+    );
+
+    $itemId = wp_insert_post( $post );
+    update_post_meta($itemId, 'members', json_encode( $members) );
+    update_post_meta($itemId, 'labels', json_encode( $labels ) );
+    update_post_meta($itemId, 'scrummer_list', $_POST['list'] );
+
+
+    return "All is Ok. <br> New item created!";
+
+}
+
+function saveAttachment(){
+
+}
+
+function saveComment(){
+    print_r($_POST);
+
+        $time = current_time('mysql');
+
+$data = array(
+    'comment_post_ID' => $_POST['itemid'],
+    'comment_author' => 'GT',
+    'comment_author_email' => 'admin@admin.com',
+//    'comment_author_url' => 'http://',
+    'comment_content' => $_POST['comment'],
+//    'comment_type' => '',
+//    'comment_parent' => 0,
+    'user_id' => get_current_user_id(),
+//    'comment_author_IP' => '127.0.0.1',
+//    'comment_agent' => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10 (.NET CLR 3.5.30729)',
+//    'comment_date' => $time,
+    'comment_approved' => 1,
+);
+
+    wp_insert_comment($data);
+
+    return $_POST['comment'];
+
+
+}
 
 
 
